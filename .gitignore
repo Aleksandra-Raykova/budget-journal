@@ -7,3 +7,12 @@ __pycache__/
 
 # IDEs
 .idea/
+
+# Log files
+*.log
+
+# Static files
+staticfiles/
+
+# Media files
+media/

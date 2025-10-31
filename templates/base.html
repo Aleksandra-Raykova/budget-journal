@@ -1,18 +1,57 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bg">
 <head>
-    <meta charset="UTF-8">
-    <title>{% block title %}My Site{% endblock %}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>{% block title %}Budget Journal{% endblock %}</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
- <header>
-        <h1>Budget Journal</h1>
-    </header>
-    <main>
-        <h2>Welcome to your personal finance space</h2>
-        <p>Track your income and expenses easily.</p>
-    </main>
+<header class="header">
+    <div class="container header-inner">
+        <div class="brand">
+            <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+                <rect x="4" y="8" width="40" height="32" rx="4" fill="#0b5fff"/>
+                <path d="M10 30h28v-4H10z" fill="#fff"/>
+                <path d="M14 22h20v-4H14z" fill="#cfe3ff"/>
+            </svg>
+            <div class="brand-text">
+                <span class="product">Budget Journal</span>
+                <small class="tagline">Control your money. Own your future.</small>
+            </div>
+        </div>
+
+        {% if user.is_authenticated %}
+            <nav class="nav">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">Dashboard</a>
+            <a href="#" class="nav-link">Reports</a>
+        {% else %}
+            <a href="#" class="nav-link cta">Get started</a>
+        {% endif %}
+
+        </nav>
+    </div>
+</header>
+
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="container footer-inner">
+        <div>© 2025 Budget Journal</div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+            <a href="#">Contact</a>
+        </div>
+    </div>
+</footer>
 </body>
 </html>
