@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" type="image/png" href="{% static 'images/favicon-16x16.png' %}">
     <title>{% block title %}Budget Journal{% endblock %}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -13,28 +14,25 @@
 <body>
 <header class="header">
     <div class="container header-inner">
-        <div class="brand">
-            <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
-                <rect x="4" y="8" width="40" height="32" rx="4" fill="#0b5fff"/>
-                <path d="M10 30h28v-4H10z" fill="#fff"/>
-                <path d="M14 22h20v-4H14z" fill="#cfe3ff"/>
-            </svg>
-            <div class="brand-text">
-                <span class="product">Budget Journal</span>
-                <small class="tagline">Control your money. Own your future.</small>
-            </div>
+    <a href="{% url 'homepage' %}" class="brand">
+        <img src="{% static 'images/budget-journal-logo.png' %}" alt="Budget Journal logo" class="logo">
+        <div class="brand-text">
+            <span class="product">Budget Journal</span>
+            <small class="tagline">Control your money. Own your future.</small>
         </div>
+    </a>
 
-        {% if user.is_authenticated %}
-            <nav class="nav">
-            <a href="#" class="nav-link">Home</a>
-            <a href="#" class="nav-link">Dashboard</a>
-            <a href="#" class="nav-link">Reports</a>
-        {% else %}
-            <a href="#" class="nav-link cta">Get started</a>
-        {% endif %}
 
-        </nav>
+    {% if user.is_authenticated %}
+        <nav class="nav">
+        <a href="#" class="nav-link">Home</a>
+        <a href="#" class="nav-link">Dashboard</a>
+        <a href="#" class="nav-link">Reports</a>
+    {% else %}
+        <a href="{% url 'register' %}" class="nav-link cta">Get started</a>
+    {% endif %}
+
+    </nav>
     </div>
 </header>
 
@@ -47,9 +45,9 @@
     <div class="container footer-inner">
         <div>© 2025 Budget Journal</div>
         <div class="footer-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Contact</a>
+            <a href="{% url 'privacy' %}">Privacy</a>
+            <a href="{% url 'terms' %}">Terms</a>
+            <a href="{% url 'contact' %}">Contact</a>
         </div>
     </div>
 </footer>
