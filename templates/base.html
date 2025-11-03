@@ -25,9 +25,9 @@
 
     {% if user.is_authenticated %}
         <nav class="nav">
-        <a href="#" class="nav-link">Home</a>
-        <a href="#" class="nav-link">Dashboard</a>
+        <a href="{% url 'dashboard' %}" class="nav-link">Dashboard</a>
         <a href="#" class="nav-link">Reports</a>
+        <a href="#" class="nav-link">Profile</a>
     {% else %}
         <a href="{% url 'register' %}" class="nav-link cta">Get started</a>
     {% endif %}
@@ -35,7 +35,6 @@
     </nav>
     </div>
 </header>
-
 <main>
     {% block content %}
     {% endblock %}
