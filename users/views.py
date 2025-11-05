@@ -6,7 +6,7 @@ from .forms import CustomUserCreationForm
 class RegisterView(FormView):
     template_name = "register.html"
     form_class = CustomUserCreationForm
-    success_url = reverse_lazy("homepage")
+    success_url = reverse_lazy("dashboard")
 
     def form_valid(self, form):
         user = form.save()

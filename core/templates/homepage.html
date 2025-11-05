@@ -3,32 +3,50 @@
 {% block content %}
     <section class="hero">
         <div class="container hero-grid">
-            <div class="hero-text">
-                <h1>Keep your finances clear. Make confident decisions.</h1>
-                <p class="lead">
-                    Budget Journal helps you track income and expenses, set budgets and follow progress — without the
-                    clutter.
-                    Simple inputs. Smart summaries. Real control.
-                </p>
-                <div class="hero-actions">
-                    <a href="{% url 'register' %}" class="button primary">Get started</a>
-                    <a href="{% url 'demo' %}" class="button ghost">See demo</a>
+
+            {% if user.is_authenticated %}
+                <div class="hero-text">
+                    <h1>Hello, {{ user.first_name|default:user.email }}!</h1>
+                    <p class="lead">
+                        You're logged in to your Budget Journal account. From here, you can manage your expenses, track
+                        your goals, and stay in control of your finances.
+                    </p>
+                    <div class="hero-actions0">
+                        <a href="{% url 'dashboard' %}" class="button primary">Go to Dashboard</a>
+                    </div>
                 </div>
 
-            </div>
+            {% else %}
+                <div class="hero-text">
+                    <h1>Keep your finances clear. Make confident decisions.</h1>
+                    <p class="lead">
+                        Budget Journal helps you track income and expenses, set budgets and follow progress — without
+                        the
+                        clutter.
+                        Simple inputs. Smart summaries. Real control.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="{% url 'register' %}" class="button primary">Get started</a>
+                        <a href="{% url 'demo' %}" class="button ghost">See demo</a>
+                    </div>
+                </div>
+            {% endif %}
+
         </div>
     </section>
 
-    <section class="cta-strip">
-        <div class="container cta-inner">
-            <div>
-                <h3>Ready to take control?</h3>
-                <p class="muted">Create your first entry - it takes less than a minute.</p>
+    {% if not user.is_authenticated %}
+        <section class="cta-strip">
+            <div class="container cta-inner">
+                <div>
+                    <h3>Ready to take control?</h3>
+                    <p class="muted">Create your first entry - it takes less than a minute.</p>
+                </div>
+                <div>
+                    <a href="{% url 'register' %}" class="button primary large">Get started</a>
+                </div>
             </div>
-            <div>
-                <a href="{% url 'register' %}" class="button primary large">Get started</a>
-            </div>
-        </div>
-    </section>
+        </section>
+    {% endif %}
 
 {% endblock %}
