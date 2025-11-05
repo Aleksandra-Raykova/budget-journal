@@ -9,5 +9,4 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),  # contacts page
     path('dashboard', views.dashboard, name='dashboard'), # dashboard page
     path('reports/', views.reports, name='reports'), # reports page
-    path('profile/', views.profile, name='profile'),
 ]

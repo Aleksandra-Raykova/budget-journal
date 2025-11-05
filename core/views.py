@@ -29,6 +29,4 @@ def dashboard(request):
 def reports(request):
     return render(request, 'reports.html')
 
-@login_required
-def profile(request):
-    return render(request, 'profile.html')
+

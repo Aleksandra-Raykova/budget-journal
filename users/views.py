@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.contrib.auth import login
@@ -12,3 +14,7 @@ class RegisterView(FormView):
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
+
+@login_required
+def profile(request):
+    return render(request, 'profile.html')
