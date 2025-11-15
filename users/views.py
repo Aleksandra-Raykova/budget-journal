@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import FormView
 from django.contrib.auth import login
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, CustomUserLoginForm
+
 
 class RegisterView(FormView):
     template_name = "register.html"
@@ -14,6 +16,16 @@ class RegisterView(FormView):
         user = form.save()
         login(self.request, user)
         return super().form_valid(form)
+
+class ProfileLoginView(FormView):
+    template_name = "login.html"
+    form_class = CustomUserLoginForm
+    success_url = reverse_lazy("dashboard")
+
+    def form_valid(self, form):
+        login(self.request, form.get_user())
+        return super().form_valid(form)
+
 
 @login_required
 def profile(request):

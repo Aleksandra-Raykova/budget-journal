@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Login | Budget Journal{% endblock %}
+
+{% block content %}
+    <div class="register-container">
+    <h1>Login</h1>
+
+    <!-- TODO: Refactor the CSS so the form layout can be reused for both the login and the registration pages. -->
+        <form method="post" class="register-form">
+            {% csrf_token %}
+
+             {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+              <div class="form-error">{{ field.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+            {% if form.non_field_errors %}
+                <div class="form-error">{{ form.non_field_errors|striptags }}</div>
+            {% endif %}
+
+            <button type="submit" class="button primary">Login</button>
+        </form>
+    </div>
+{% endblock %}
