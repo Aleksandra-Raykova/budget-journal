@@ -29,6 +29,11 @@
                 <a href="{% url 'reports' %}" class="nav-link">Reports</a>
                 <a href="{% url 'profile' %}" class="nav-link">Profile</a>
 
+                <form method="post" action="{% url 'logout' %}" class="logout-form">
+                    {% csrf_token %}
+                    <button class="nav-link logout-link">Logout</button>
+                </form>
+
             {% else %}
                 <a href="{% url 'register' %}" class="nav-link cta">Get started</a>
                 <a href="{% url 'login' %}" class="nav-link cta">Login</a>

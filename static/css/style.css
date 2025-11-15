@@ -1,20 +1,31 @@
+/* =========================================================
+   1. VARIABLES / BASE STYLES
+   ========================================================= */
+
 :root {
     --bg: #f7f9fb;
     --panel: #ffffff;
     --muted: #6b7280;
-    --accent: #0b5fff; /* confident blue */
+    --accent: #0b5fff;
     --accent-2: #083f9a;
     --text: #0f1724;
+
     --radius: 10px;
+    --radius-sm: 6px;
+
+    --pad-sm: 8px 10px;
+    --pad-md: 14px 24px;
+
     --glass: rgba(11, 95, 255, 0.06);
     --shadow: 0 6px 18px rgba(11, 20, 40, 0.06);
     --max: 1100px;
+
     font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     color-scheme: light;
 }
 
 * {
-    box-sizing: border-box
+    box-sizing: border-box;
 }
 
 body {
@@ -25,15 +36,30 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* Common layout wrapper */
 .container {
     width: 92%;
     max-width: var(--max);
     margin: 0 auto;
 }
 
-/* Header */
+/* Generic resets for clickable elements */
+.button-reset,
+.link-reset {
+    background: none;
+    border: none;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   2. HEADER
+   ========================================================= */
+
 .header {
-    background: #ffffff;
+    background: #fff;
     border-bottom: 1px solid rgba(15, 23, 36, 0.04);
     position: sticky;
     top: 0;
@@ -47,75 +73,96 @@ body {
     padding: 1rem 0;
 }
 
+/* Logo + text */
 .brand {
     display: flex;
     align-items: center;
     gap: 10px;
-    text-decoration: none;
     color: inherit;
-}
-
-.brand:hover {
     text-decoration: none;
 }
 
 .logo {
     width: 40px;
-    height: 40px
+    height: 40px;
 }
 
 .brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
 }
 
 .product {
-  font-weight: 600;
-  font-size: 19px;
-  color: #0f1724;
+    font-weight: 600;
+    font-size: 19px;
 }
 
 .tagline {
-  font-size: 0.9rem;
-  color: var(--muted);
+    font-size: 0.9rem;
+    color: var(--muted);
 }
 
-/* Nav */
+
+/* =========================================================
+   3. NAVIGATION
+   ========================================================= */
+
 .nav {
     display: flex;
     gap: 12px;
-    align-items: center
+    align-items: center;
 }
 
+/* Standard nav items */
 .nav-link {
+    padding: var(--pad-sm);
+    border-radius: var(--radius-sm);
     color: var(--muted);
     text-decoration: none;
-    padding: 8px 10px;
-    border-radius: 8px
+    transition: background 0.15s;
 }
 
 .nav-link:hover {
     color: var(--text);
-    background: rgba(11, 20, 40, 0.03)
+    background: rgba(11, 20, 40, 0.03);
 }
 
+/* CTA / primary nav button */
 .nav-link.cta {
     background: var(--accent);
     color: #fff;
-    padding: 8px 12px
+    padding: 8px 12px;
 }
 
 .nav-link.cta:hover {
-    background: var(--accent-2)
+    background: var(--accent-2);
 }
 
-/* Hero */
+/* Logout behaves like a nav link */
+.logout-link {
+    padding: var(--pad-sm);
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.logout-link:hover {
+    background: rgba(11, 20, 40, 0.03);
+    color: var(--text);
+}
+
+
+/* =========================================================
+   4. HERO SECTION
+   ========================================================= */
+
 .hero {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     text-align: center;
     min-height: 90vh;
     padding: 60px 20px;
@@ -123,22 +170,22 @@ body {
 }
 
 .hero-text h1 {
-    margin: 0 0 20px 0;
+    margin-bottom: 20px;
     font-size: 40px;
     line-height: 1.2;
     font-weight: 700;
-    color: #0a0f29;
 }
 
+/* Subtitle */
 .lead {
-    margin: 0 auto 28px auto;
-    color: var(--muted);
+    margin: 0 auto 28px;
     max-width: 70ch;
     font-size: 18px;
     line-height: 1.6;
-    text-align: center;
+    color: var(--muted);
 }
 
+/* Buttons group */
 .hero-actions {
     display: flex;
     gap: 16px;
@@ -146,17 +193,19 @@ body {
     margin-top: 12px;
 }
 
+/* Generic button base */
 .button {
     display: inline-block;
-    padding: 14px 24px;
-    border-radius: 10px;
-    text-decoration: none;
+    padding: var(--pad-md);
+    border-radius: var(--radius);
     font-weight: 600;
-    border: 1px solid transparent;
     font-size: 16px;
-    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: 0.2s;
 }
 
+/* Primary button */
 .button.primary {
     background: var(--accent);
     color: #fff;
@@ -168,8 +217,8 @@ body {
     transform: translateY(-2px);
 }
 
+/* Ghost button */
 .button.ghost {
-    background: transparent;
     color: var(--accent);
     border: 1px solid rgba(11, 95, 255, 0.2);
 }
@@ -179,120 +228,128 @@ body {
 }
 
 
-/* CTA strip */
+/* =========================================================
+   5. CTA STRIP
+   ========================================================= */
+
 .cta-strip {
-    background: linear-gradient(90deg, rgba(11, 95, 255, 0.06), rgba(11, 95, 255, 0.02));
+    background: linear-gradient(
+        90deg,
+        rgba(11, 95, 255, 0.06),
+        rgba(11, 95, 255, 0.02)
+    );
     padding: 18px 0;
-    border-radius: 10px;
-    margin: 28px 0
+    border-radius: var(--radius);
+    margin: 28px 0;
 }
 
 .cta-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px
+    gap: 12px;
 }
 
-/* Footer */
+
+/* =========================================================
+   6. FOOTER
+   ========================================================= */
+
 .footer {
     padding: 28px 0;
     border-top: 1px solid rgba(15, 23, 36, 0.04);
-    color: var(--muted)
+    color: var(--muted);
 }
 
 .footer-inner {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px
 }
 
-/* Responsive */
-@media (max-width: 900px) {
-    .hero-grid {
-        grid-template-columns:1fr;
-        padding: 0 6px
-    }
 
-    .grid-3 {
-        grid-template-columns:1fr;
-        gap: 12px
-    }
-
-    .cta-inner {
-        flex-direction: column;
-        align-items: flex-start
-    }
-
-    .nav {
-        display: none
-    }
-
-    .brand-text .product {
-        font-size: 16px
-    }
-}
-
-/* ----- Register Form Styles ----- */
+/* =========================================================
+   7. REGISTER / FORMS
+   ========================================================= */
 
 .register-container {
-  max-width: 420px;
-  margin: 40px auto;
-  background: #ffffff;
-  padding: 30px 36px;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    max-width: 420px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px 36px;
+    border-radius: var(--radius);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
 .register-container h1 {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
+/* Form layout */
 .register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
+/* Field group */
 .form-group {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group label {
-  font-weight: 600;
-  margin-bottom: 6px;
+    font-weight: 600;
+    margin-bottom: 6px;
 }
 
+/* Inputs */
 .form-group input,
 .form-group select,
 .form-group textarea {
-  width: 100%;
-  box-sizing: border-box;
-  padding: 10px 14px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #fff;
-  font-size: 1rem;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    border: 1px solid #ccc;
+    font-size: 1rem;
 }
 
 .form-group input:focus {
-  outline: none;
-  border-color: #4caf50; /* или основният ти акцентен цвят */
+    outline: none;
+    border-color: var(--accent);
 }
 
+/* Error message */
 .form-error {
-  color: #e74c3c;
-  font-size: 0.9em;
-  margin-top: 4px;
+    color: #e74c3c;
+    font-size: 0.9em;
 }
 
+/* Submit button */
 .register-form .button {
-  width: 100%;
-  padding: 12px;
-  border-radius: 6px;
-  font-weight: 600;
-  margin-top: 8px;
+    width: 100%;
+    padding: 12px;
+    border-radius: var(--radius-sm);
+    margin-top: 8px;
+}
+
+
+/* =========================================================
+   8. RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+    .cta-inner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Hide nav on mobile – if you add hamburger, this will change */
+    .nav {
+        display: none;
+    }
+
+    .brand-text .product {
+        font-size: 16px;
+    }
 }
