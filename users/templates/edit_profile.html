@@ -1,11 +1,21 @@
 {% extends "base.html" %}
 {% block title %}Edit Profile | Budget Journal{% endblock %}
 {% block content %}
-    <div class="register-container">
+    <div class="profile-container">
         <h1>Edit Profile</h1>
         <!-- TODO: Refactor the CSS so the form layout can be reused for both the login and the registration pages. -->
-        <form method="post" class="register-form">
+        <form method="post" class="profile-form">
+        {% csrf_token %}
 
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+              <div class="form-error">{{ field.errors|striptags }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
 
             <button type="submit" class="button primary">Edit</button>
         </form>

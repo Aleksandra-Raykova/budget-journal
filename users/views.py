@@ -56,3 +56,4 @@ class ProfileDeleteView(LoginRequiredMixin, View):
         logout(request)
         user.delete()
         return redirect("homepage")
+

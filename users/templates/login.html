@@ -2,11 +2,11 @@
 {% block title %}Login | Budget Journal{% endblock %}
 
 {% block content %}
-    <div class="register-container">
+    <div class="profile-container">
     <h1>Login</h1>
 
     <!-- TODO: Refactor the CSS so the form layout can be reused for both the login and the registration pages. -->
-        <form method="post" class="register-form">
+        <form method="post" class="profile-form">
             {% csrf_token %}
 
              {% for field in form %}

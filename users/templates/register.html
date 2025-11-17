@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Register | Budget Journal{% endblock %}
 {% block content %}
-<div class="register-container">
+<div class="profile-container">
     <h1>Register</h1>
-    <form method="post" class="register-form">
+    <form method="post" class="profile-form">
         {% csrf_token %}
 
         {% for field in form %}

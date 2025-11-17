@@ -288,10 +288,10 @@ body {
 
 
 /* =========================================================
-   7. REGISTER / FORMS
+   7. REGISTER LOGIN EDIT / FORMS
    ========================================================= */
 
-.register-container {
+.profile-container {
     max-width: 420px;
     margin: 40px auto;
     background: #fff;
@@ -300,13 +300,13 @@ body {
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 
-.register-container h1 {
+.profile-container h1 {
     text-align: center;
     margin-bottom: 20px;
 }
 
 /* Form layout */
-.register-form {
+.profile-form {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -345,7 +345,7 @@ body {
 }
 
 /* Submit button */
-.register-form .button {
+.profile-form .button {
     width: 100%;
     padding: 12px;
     border-radius: var(--radius-sm);
