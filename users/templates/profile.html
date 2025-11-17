@@ -3,8 +3,27 @@
 {% block title %} Profile | Budget Journal {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container" style="max-width: 600px; margin-top: 40px;">
+
         <h1>Profile</h1>
-        <p>Profile will be displayed here.</p>
+
+        <!-- User Info -->
+        <div class="card" style="padding: 20px; margin-top: 20px;">
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>First name:</strong> {{ user.first_name|default:"—" }}</p>
+            <p><strong>Last name:</strong> {{ user.last_name|default:"—" }}</p>
+        </div>
+
+        <!-- Actions -->
+        <div style="margin-top: 25px; display: flex; gap: 12px;">
+            <a href="{% url 'edit_profile' %}" class="button primary">Edit Profile</a>
+
+            <form method="post" action="{% url 'delete_profile' %}"
+                  onsubmit="return confirm('Are you sure you want to delete your profile? This cannot be undone.');">
+                {% csrf_token %}
+                <button type="submit" class="button danger">Delete profile</button>
+            </form>
+        </div>
+
     </div>
 {% endblock %}
