@@ -4,7 +4,218 @@
 
 {% block content %}
     <div class="container">
-        <h1>Dashboard</h1>
-        <p>Dashboard will be displayed here.</p>
+        <h1>November 2025</h1>
+
+        <div class="summary-bar">
+            <div class="summary-item">
+                <h3>START AMOUNT</h3>
+                <p>€6,245.58</p> <!--TODO-->
+            </div>
+
+            <div class="summary-item">
+                <h3>TOTAL INCOME</h3>
+                <p>€2,245.58</p> <!--TODO-->
+            </div>
+
+            <div class="summary-item">
+                <h3>TOTAL EXPENSES</h3>
+                <p>€1,386.46</p> <!--TODO-->
+            </div>
+
+            <div class="summary-item">
+                <h3>TOTAL REMAINING</h3>
+                <p>€7,500.00</p> <!--TODO-->
+            </div>
+
+            <div class="summary-item">
+                <h3>TOTAL WEALTH</h3>
+                <p>€7,500.00</p> <!--TODO-->
+            </div>
+
+        </div>
+
+        <!-- INCOME TABLE -->
+        <table class="table table-income">
+            <caption class="header-title">INCOME</caption>
+
+            <thead>
+            <tr>
+                <th>Source</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Salary</td>
+                <td>€945.42</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Freelance</td>
+                <td>€1,051.55</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr class="total-row">
+                <td>Total</td>
+                <td>€1,996.97</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="add-btn-wrapper">
+            <a href="/add-income" class="add-button btn-orange">+ Add New Income</a>
+        </div>
+
+        <!-- EXPENSES TABLE -->
+        <table class="table table-expenses">
+            <caption class="header-title">EXPENSES</caption>
+
+            <thead>
+            <tr>
+                <th>Bill</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Rent</td>
+                <td>€513.00</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Grocery</td>
+                <td>€51.55</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr class="total-row">
+                <td>Total</td>
+                <td>€1,996.97</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="add-btn-wrapper">
+            <a href="/add-income" class="add-button btn-red">+ Add New Expense</a>
+        </div>
+
+
+        <!-- SAVINGS TABLE -->
+        <table class="table table-savings">
+            <caption class="header-title">SAVINGS</caption>
+
+            <thead>
+            <tr>
+                <th>Category</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Cash</td>
+                <td>€226.23</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Deposit</td>
+                <td>€551.55</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr class="total-row">
+                <td>Total</td>
+                <td>€1,996.97</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="add-btn-wrapper">
+            <a href="/add-income" class="add-button btn-green">+ Add New Saving</a>
+        </div>
+
+
+        <!-- INVESTMENTS TABLE -->
+        <table class="table table-investments">
+            <caption class="header-title">INVESTMENTS</caption>
+
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Month Opening Value</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Fund in USD</td>
+                <td>€5226.23</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Stock</td>
+                <td>€551.55</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr class="total-row">
+                <td>Total</td>
+                <td>€1,996.97</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="add-btn-wrapper">
+            <a href="/add-income" class="add-button btn-blue">+ Add New Investment</a>
+        </div>
+
+
     </div>
 {% endblock %}

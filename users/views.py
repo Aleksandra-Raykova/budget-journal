@@ -30,7 +30,7 @@ class ProfileLoginView(FormView):
         return super().form_valid(form)
 
 
-class ProfileLogoutView(View):
+class ProfileLogoutView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         logout(request)
         return redirect("homepage")
