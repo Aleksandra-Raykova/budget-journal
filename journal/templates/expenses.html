@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="container">
-        <h1>November 2025</h1>
+        <h1>{{ period.month_name }} {{ period.year }}</h1>
 
         <table class="table table-expenses">
             <caption class="header-title">EXPENSES</caption>
@@ -13,43 +13,58 @@
             <thead>
             <tr>
                 <th>Bill</th>
+                <th>Date</th>
                 <th>Amount</th>
                 <th></th>
             </tr>
             </thead>
 
             <tbody>
-            <tr>
-                <td>Rent</td>
-                <td>€513.00</td>
-                <td class="actions">
-                    <button class="icon-btn" title="Edit">✏️</button>
-                    <button class="icon-btn" title="Delete">🗑️</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Grocery</td>
-                <td>€51.55</td>
-                <td class="actions">
-                    <button class="icon-btn" title="Edit">✏️</button>
-                    <button class="icon-btn" title="Delete">🗑️</button>
-                </td>
-            </tr>
+            {% if expenses %}
+                {% for exp in expenses %}
+                    <tr>
+                        <td>{{ exp.bill }}</td>
+                        <td>{{ exp.date }}</td>
+                        <td>€{{ exp.amount|floatformat:2 }}</td>
+                        <td class="actions">
+                            <form method="POST" action="{% url 'delete_expense' exp.id %}">
+                                {% csrf_token %}
+                                <button class="icon-btn" title="Delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>No expenses yet</td>
+                </tr>
+            {% endif %}
             </tbody>
 
             <tfoot>
             <tr class="total-row">
                 <td>Total</td>
-                <td>€1,996.97</td>
+                <td>€{{ total_expenses|floatformat:2 }}</td>
+                <td></td>
                 <td></td>
             </tr>
             </tfoot>
         </table>
 
-        <div class="add-btn-wrapper">
-            <a href="/add-income" class="add-button btn-red">+ Add New Expense</a>
-        </div>
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.date }}
+            {{ form.date.errors|striptags }}
+
+            {{ form.bill }}
+            {{ form.bill.errors|striptags }}
+
+            {{ form.amount }}
+            {{ form.amount.errors|striptags }}
+
+            <button type="submit" class="add-button btn-red">+ Add New Expense</button>
+        </form>
     </div>
 
 {% endblock %}

@@ -20,19 +20,25 @@
             </thead>
             <!-- Income List -->
             <tbody>
-            {% for inc in incomes %}
+            {% if incomes %}
+                {% for inc in incomes %}
+                    <tr>
+                        <td>{{ inc.source }}</td>
+                        <td>{{ inc.date }}</td>
+                        <td>€{{ inc.amount|floatformat:2 }}</td>
+                        <td class="actions">
+                            <form method="POST" action="{% url 'delete_income' inc.id %}">
+                                {% csrf_token %}
+                                <button class="icon-btn" title="Delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
                 <tr>
-                    <td>{{ inc.source }}</td>
-                    <td>{{ inc.date }}</td>
-                    <td>€{{ inc.amount|floatformat:2 }}</td>
-                    <td class="actions">
-                        <form method="POST" action="{% url 'delete_income' inc.id %}">
-                            {% csrf_token %}
-                            <button class="icon-btn" title="Delete">🗑️</button>
-                        </form>
-                    </td>
+                    <td>No incomes yet</td>
                 </tr>
-            {% endfor %}
+            {% endif %}
             </tbody>
 
             <tfoot>

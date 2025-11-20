@@ -31,3 +31,15 @@ class Income(models.Model):
 
     def __str__(self):
         return f"{self.source} — {self.amount}"
+
+
+class Expense(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="user_expenses")
+    period = models.ForeignKey(Period, on_delete=models.CASCADE, related_name="period_expenses")
+    bill = models.CharField(max_length=150)
+    amount = models.DecimalField(max_digits=12, decimal_places=2, validators=[MinValueValidator(0.01)])
+    date = models.DateField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.bill} — {self.amount}"

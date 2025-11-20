@@ -4,9 +4,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
-from .models import Income, Period
-from .forms import IncomeForm
+from .models import Income, Period, Expense
+from .forms import IncomeForm, ExpenseForm
 from datetime import date
+
 
 def get_current_period(user):
     today = date.today()
@@ -17,13 +18,14 @@ def get_current_period(user):
     )
     return period
 
+
 @login_required
 def income(request):
     current_user = request.user
     current_period = get_current_period(current_user)
 
     if request.method == "POST":
-        form = IncomeForm(request.POST,period=current_period)
+        form = IncomeForm(request.POST, period=current_period)
         if form.is_valid():
             inc = form.save(commit=False)
             inc.user = current_user
@@ -43,12 +45,52 @@ def income(request):
         'period': current_period,
     })
 
+
+@login_required()
 def delete_income(request, pk):
     income_obj = get_object_or_404(Income, pk=pk)
 
     if request.method == "POST":
         income_obj.delete()
         return redirect('income')
+
+    return HttpResponse(status=405)
+
+
+@login_required
+def expense(request):
+    current_user = request.user
+    current_period = get_current_period(current_user)
+
+    if request.method == "POST":
+        form = ExpenseForm(request.POST, period=current_period)
+        if form.is_valid():
+            exp = form.save(commit=False)
+            exp.user = current_user
+            exp.period = current_period
+            exp.save()
+            form = ExpenseForm()
+    else:
+        form = ExpenseForm()
+
+    expenses = Expense.objects.filter(user=current_user, period=current_period)
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+
+    return render(request, 'expenses.html', {
+        'expenses': expenses,
+        'form': form,
+        'total_expenses': total_expenses,
+        'period': current_period,
+    })
+
+
+@login_required()
+def delete_expense(request, pk):
+    expense_obj = get_object_or_404(Expense, pk=pk)
+
+    if request.method == "POST":
+        expense_obj.delete()
+        return redirect('expense')
 
     return HttpResponse(status=405)
 
@@ -65,9 +107,17 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         incomes = Income.objects.filter(user=current_user)
         total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
 
+        expenses = Expense.objects.filter(user=current_user)
+        total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+
+        total_remaining = total_income - total_expenses
+
         ctx["period"] = current_period
         ctx["incomes"] = incomes
         ctx["total_income"] = total_income
+        ctx["expenses"] = expenses
+        ctx["total_expenses"] = total_expenses
+        ctx["total_remaining"] = total_remaining
 
         return ctx
 
