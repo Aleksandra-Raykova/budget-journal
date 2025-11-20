@@ -8,4 +8,6 @@ urlpatterns = [
     path('incomes/delete/<int:pk>/', views.delete_income, name='delete_income'), # delete row in income table
     path('expenses/', views.expense, name='expense'),  # expense table page
     path('expenses/delete/<int:pk>/', views.delete_expense, name='delete_expense'),  # delete row in expense table
+    path('savings/', views.savings, name='saving'),  # savings table page
+    path('savings/delete/<int:pk>/', views.delete_saving, name='delete_saving'),  # delete row in saving table
 ]

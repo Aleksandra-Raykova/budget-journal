@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="container">
-        <h1>November 2025</h1>
+        <h1>{{ period.month_name }} {{ period.year }}</h1>
 
         <table class="table table-savings">
             <caption class="header-title">SAVINGS</caption>
@@ -13,43 +13,62 @@
             <thead>
             <tr>
                 <th>Category</th>
-                <th>Amount</th>
+                <th>Date</th>
+                <th>Amount Change</th>
                 <th></th>
             </tr>
             </thead>
 
             <tbody>
-            <tr>
-                <td>Cash</td>
-                <td>€226.23</td>
-                <td class="actions">
-                    <button class="icon-btn" title="Edit">✏️</button>
-                    <button class="icon-btn" title="Delete">🗑️</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Deposit</td>
-                <td>€551.55</td>
-                <td class="actions">
-                    <button class="icon-btn" title="Edit">✏️</button>
-                    <button class="icon-btn" title="Delete">🗑️</button>
-                </td>
-            </tr>
+            {% if savings %}
+                {% for sav in savings %}
+                    <tr>
+                        <td>{{ sav.category }}</td>
+                        <td>€{{ sav.date }}</td>
+                        <td>€{{ sav.amount }}</td>
+                        <td class="actions">
+                            <form method="POST" action="{% url 'delete_saving' sav.id %}">
+                                {% csrf_token %}
+                                <button class="icon-btn" title="Delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td>No savings yet</td>
+                </tr>
+            {% endif %}
             </tbody>
 
             <tfoot>
             <tr class="total-row">
                 <td>Total</td>
-                <td>€1,996.97</td>
                 <td></td>
+                <td>€{{ total_savings }}</td>
+                <td></td>
+
             </tr>
             </tfoot>
         </table>
 
-        <div class="add-btn-wrapper">
-            <a href="/add-income" class="add-button btn-green">+ Add New Saving</a>
-        </div>
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.date }}
+            {{ form.date.errors|striptags }}
+
+            {{ form.operation }}
+            {{ form.operation.errors|striptags }}
+
+            {{ form.category }}
+            {{ form.bill.errors|striptags }}
+
+            {{ form.amount }}
+            {{ form.amount.errors|striptags }}
+
+            <button type="submit" class="add-button btn-green">+ Add New Saving</button>
+        </form>
     </div>
 
 {% endblock %}

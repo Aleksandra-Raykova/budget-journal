@@ -1,5 +1,6 @@
 from django import forms
-from .models import Income, Expense
+from .models import Income, Expense, Saving
+
 
 class PeriodDateValidationMixin:
     def clean_date(self):
@@ -44,3 +45,46 @@ class ExpenseForm(PeriodDateValidationMixin, forms.ModelForm):
     def __init__(self, *args, period=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.period = period
+
+
+class SavingsForm(PeriodDateValidationMixin, forms.ModelForm):
+    OPERATION_CHOICES = (
+        ("add", "Add (+)"),
+        ("remove", "Remove (-)"),
+    )
+
+    operation = forms.ChoiceField(
+        choices=OPERATION_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,
+    )
+
+    class Meta:
+        model = Saving
+        fields = ("category", "amount", "date")
+        widgets = {
+            "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "category": forms.TextInput(attrs={"class": "form-control"}),
+            "amount": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+        }
+
+    def __init__(self, *args, period=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.period = period
+
+    def clean_amount(self):
+        amount = self.cleaned_data["amount"]
+        if amount < 0:
+            raise forms.ValidationError("Amount must be positive.")
+        return amount
+
+    def clean(self):
+        cleaned = super().clean()
+        amount = cleaned.get("amount")
+        op = cleaned.get("operation")
+
+        if amount is None or op is None:
+            return cleaned
+
+        cleaned["amount"] = amount if op == "add" else -amount
+        return cleaned

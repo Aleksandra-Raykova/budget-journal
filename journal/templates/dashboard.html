@@ -20,12 +20,12 @@
 
             <div class="summary-item">
                 <h3>TOTAL EXPENSES</h3>
-                <p>€{{ total_expenses|floatformat:2 }}</p> <!--TODO-->
+                <p>€{{ total_expenses|floatformat:2 }}</p>
             </div>
 
             <div class="summary-item">
                 <h3>TOTAL REMAINING</h3>
-                <p>€{{ total_remaining  }}</p> <!--TODO-->
+                <p>€{{ total_remaining|floatformat:2 }}</p>
             </div>
 
             <div class="summary-item">
@@ -87,16 +87,16 @@
                             </thead>
                             <tbody>
                             {% if expenses %}
-                            {% for exp in expenses %}
-                            <tr>
-                                <td>{{ exp.bill|slice:":15" }}</td>
-                                <td>€{{ exp.amount|floatformat:2 }}</td>
-                            </tr>
-                            {% endfor %}
-                                {% else %}
+                                {% for exp in expenses %}
+                                    <tr>
+                                        <td>{{ exp.bill|slice:":15" }}</td>
+                                        <td>€{{ exp.amount|floatformat:2 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
                                 <tr>
-                                <td>No expenses yet</td>
-                            </tr>
+                                    <td>No expenses yet</td>
+                                </tr>
                             {% endif %}
 
                             </tbody>
@@ -113,7 +113,7 @@
 
             <!-- SAVINGS TABLE -->
             <div class="column">
-                <a href="{% url 'income' %}" class="clickable-table-wrapper">
+                <a href="{% url 'saving' %}" class="clickable-table-wrapper">
                     <div class="table--dashboard-wrapper clickable-table">
                         <table class="table table--dashboard table-savings">
                             <caption class="header-title">SAVINGS</caption>
@@ -121,24 +121,29 @@
                             <thead>
                             <tr>
                                 <th>Category</th>
-                                <th>Amount</th>
+                                <th>Change</th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <tr>
-                                <td>Cash</td>
-                                <td>€226.23</td>
-                            </tr>
-                            <tr>
-                                <td>Deposit</td>
-                                <td>€551.55</td>
-                            </tr>
+                            {% if savings %}
+                                {% for sav in savings %}
+                                    <tr>
+                                        <td>{{ sav.category|slice:":15" }}</td>
+                                        <td>€{{ sav.amount|floatformat:2 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td>No savings yet</td>
+                                </tr>
+                            {% endif %}
                             </tbody>
+
                             <tfoot>
                             <tr class="total-row">
                                 <td>Total</td>
-                                <td>€1,996.97</td>
+                                <td>€{{ total_savings|floatformat:2 }}</td>
                             </tr>
                             </tfoot>
                         </table>
