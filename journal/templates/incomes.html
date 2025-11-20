@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Income | Budget Journal{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>{{ period.month_name }} {{ period.year }}</h1>
+
+        <table class="table table-income">
+            <caption class="header-title">INCOME</caption>
+
+            <thead>
+            <tr>
+                <th>Source</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+            <!-- Income List -->
+            <tbody>
+            {% for inc in incomes %}
+                <tr>
+                    <td>{{ inc.source }}</td>
+                    <td>{{ inc.date }}</td>
+                    <td>€{{ inc.amount|floatformat:2 }}</td>
+                    <td class="actions">
+                        <form method="POST" action="{% url 'delete_income' inc.id %}">
+                            {% csrf_token %}
+                            <button class="icon-btn" title="Delete">🗑️</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+
+            <tfoot>
+            <tr class="total-row">
+                <td>Total</td>
+                <td>€{{ total_income|floatformat:2 }}</td>
+                <td></td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <!-- Income Create Form -->
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.date }}
+            {{ form.date.errors|striptags }}
+
+            {{ form.source }}
+            {{ form.source.errors|striptags }}
+
+            {{ form.amount }}
+            {{ form.amount.errors|striptags }}
+
+            <button type="submit" class="add-button btn-orange">+ Add New Income</button>
+        </form>
+    </div>
+
+{% endblock %}

@@ -411,7 +411,7 @@ body {
 }
 
 /* ============================================
-   INCOME TABLE
+  DASHBOARD TABLES
 ============================================ */
 
 .table {
@@ -419,6 +419,7 @@ body {
     border-collapse: collapse;
     margin: 20px auto;
     font-family: system-ui, sans-serif;
+    text-decoration: none;
 }
 
 
@@ -430,6 +431,7 @@ body {
     text-align: center;
     border-radius: 4px 4px 0 0;
     border-bottom: 1px solid;
+    text-decoration: none;
 }
 
 
@@ -440,26 +442,31 @@ body {
     border: none;
     border-bottom: 2px solid;
     text-align: left;
+    text-decoration: none;
 }
 
 
 .table td {
     padding: 12px 16px;
     border-bottom: 1px solid;
+    text-decoration: none;
 }
 
 .table th:first-child {
     border-left: none;
+    text-decoration: none;
 }
 
 .table th:last-child {
     border-right: none;
+    text-decoration: none;
 }
 
 
 .table .actions {
     white-space: nowrap;
     text-align: right;
+    text-decoration: none;
 }
 
 .icon-btn {
@@ -625,4 +632,56 @@ body {
     background: #dce6ff;
 }
 
+form {
+    display: contents;
+}
 
+.form-row form {
+    display: contents;
+}
+
+
+
+/* OVERRIDES ONLY FOR DASHBOARD TABLES */
+.tables-wrapper {
+    box-sizing: border-box;
+}
+
+/* Create a four-column layout */
+.column {
+  float: left;
+  width: 25%;
+  padding: 5px;
+}
+
+/* Clearfix (clear floats) */
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.table--dashboard-wrapper {
+    flex: 1;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.table--dashboard {
+    width: 100%;
+    table-layout: auto;
+}
+
+.clickable-table-wrapper {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.clickable-table {
+    border: 0 solid transparent;
+}
+
+.clickable-table:hover {
+    border: 2px solid transparent;
+}

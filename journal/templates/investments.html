@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Income | Budget Journal{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <h1>November 2025</h1>
+
+        <table class="table table-investments">
+            <caption class="header-title">INVESTMENTS</caption>
+
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Month Opening Value</th>
+                <th></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr>
+                <td>Fund in USD</td>
+                <td>€5226.23</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td>Stock</td>
+                <td>€551.55</td>
+                <td class="actions">
+                    <button class="icon-btn" title="Edit">✏️</button>
+                    <button class="icon-btn" title="Delete">🗑️</button>
+                </td>
+            </tr>
+            </tbody>
+
+            <tfoot>
+            <tr class="total-row">
+                <td>Total</td>
+                <td>€1,996.97</td>
+                <td></td>
+            </tr>
+            </tfoot>
+        </table>
+
+        <div class="add-btn-wrapper">
+            <a href="/add-income" class="add-button btn-blue">+ Add New Investment</a>
+        </div>
+    </div>
+
+{% endblock %}
