@@ -1,5 +1,5 @@
 from django import forms
-from .models import Income, Expense, Saving
+from .models import Income, Expense, Saving, Investment
 
 
 class PeriodDateValidationMixin:
@@ -17,13 +17,26 @@ class PeriodDateValidationMixin:
         return date
 
 
+class OperationAmountValidationMixin:
+    def clean(self):
+        cleaned = super().clean()
+        amount = cleaned.get("amount")
+        op = cleaned.get("operation")
+
+        if amount is None or op is None:
+            return cleaned
+
+        cleaned["amount"] = amount if op == "add" else -amount
+        return cleaned
+
+
 class IncomeForm(PeriodDateValidationMixin, forms.ModelForm):
     class Meta:
         model = Income
-        fields = ("source", "amount", "date")
+        fields = ("name", "amount", "date")
         widgets = {
             "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "source": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
             "amount": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
         }
 
@@ -35,10 +48,10 @@ class IncomeForm(PeriodDateValidationMixin, forms.ModelForm):
 class ExpenseForm(PeriodDateValidationMixin, forms.ModelForm):
     class Meta:
         model = Expense
-        fields = ("bill", "amount", "date")
+        fields = ("name", "amount", "date")
         widgets = {
             "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "source": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
             "amount": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
         }
 
@@ -47,7 +60,7 @@ class ExpenseForm(PeriodDateValidationMixin, forms.ModelForm):
         self.period = period
 
 
-class SavingsForm(PeriodDateValidationMixin, forms.ModelForm):
+class SavingsForm(PeriodDateValidationMixin, OperationAmountValidationMixin, forms.ModelForm):
     OPERATION_CHOICES = (
         ("add", "Add (+)"),
         ("remove", "Remove (-)"),
@@ -61,10 +74,10 @@ class SavingsForm(PeriodDateValidationMixin, forms.ModelForm):
 
     class Meta:
         model = Saving
-        fields = ("category", "amount", "date")
+        fields = ("name", "amount", "date")
         widgets = {
             "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
-            "category": forms.TextInput(attrs={"class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
             "amount": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
         }
 
@@ -78,13 +91,34 @@ class SavingsForm(PeriodDateValidationMixin, forms.ModelForm):
             raise forms.ValidationError("Amount must be positive.")
         return amount
 
-    def clean(self):
-        cleaned = super().clean()
-        amount = cleaned.get("amount")
-        op = cleaned.get("operation")
 
-        if amount is None or op is None:
-            return cleaned
+class InvestmentsForm(PeriodDateValidationMixin, OperationAmountValidationMixin, forms.ModelForm):
+    OPERATION_CHOICES = (
+        ("add", "Add (+)"),
+        ("remove", "Remove (-)"),
+    )
 
-        cleaned["amount"] = amount if op == "add" else -amount
-        return cleaned
+    operation = forms.ChoiceField(
+        choices=OPERATION_CHOICES,
+        widget=forms.Select(attrs={"class": "form-control"}),
+        required=True,
+    )
+
+    class Meta:
+        model = Investment
+        fields = ("name", "amount", "date")
+        widgets = {
+            "date": forms.DateInput(attrs={"type": "date", "class": "form-control"}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "amount": forms.NumberInput(attrs={"class": "form-control", "step": "0.01"}),
+        }
+
+    def __init__(self, *args, period=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.period = period
+
+    def clean_amount(self):
+        amount = self.cleaned_data["amount"]
+        if amount < 0:
+            raise forms.ValidationError("Amount must be positive.")
+        return amount

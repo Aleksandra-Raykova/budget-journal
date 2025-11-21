@@ -23,7 +23,7 @@
             {% if incomes %}
                 {% for inc in incomes %}
                     <tr>
-                        <td>{{ inc.source }}</td>
+                        <td>{{ inc.name }}</td>
                         <td>{{ inc.date }}</td>
                         <td>€{{ inc.amount|floatformat:2 }}</td>
                         <td class="actions">
@@ -55,11 +55,11 @@
         <form method="post">
             {% csrf_token %}
 
+            {{ form.name }}
+            {{ form.name.errors|striptags }}
+
             {{ form.date }}
             {{ form.date.errors|striptags }}
-
-            {{ form.source }}
-            {{ form.source.errors|striptags }}
 
             {{ form.amount }}
             {{ form.amount.errors|striptags }}

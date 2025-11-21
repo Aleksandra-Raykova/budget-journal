@@ -7,6 +7,8 @@
     <div class="container">
         <h1>November 2025</h1>
 
+        <!-- TODO format the numbers with " " (space between) -->
+
         <div class="summary-bar">
             <div class="summary-item">
                 <h3>START AMOUNT</h3>
@@ -30,7 +32,7 @@
 
             <div class="summary-item">
                 <h3>TOTAL WEALTH</h3>
-                <p>€7,500.00</p> <!--TODO-->
+                <p>€{{ total_wealth|floatformat:2 }}</p>
             </div>
 
         </div>
@@ -52,7 +54,7 @@
                             {% if incomes %}
                                 {% for inc in incomes %}
                                     <tr>
-                                        <td>{{ inc.source|slice:":15" }}</td>
+                                        <td>{{ inc.name|slice:":13" }}</td>
                                         <td>€{{ inc.amount|floatformat:2 }}</td>
                                     </tr>
                                 {% endfor %}
@@ -89,7 +91,7 @@
                             {% if expenses %}
                                 {% for exp in expenses %}
                                     <tr>
-                                        <td>{{ exp.bill|slice:":15" }}</td>
+                                        <td>{{ exp.name|slice:":15" }}</td>
                                         <td>€{{ exp.amount|floatformat:2 }}</td>
                                     </tr>
                                 {% endfor %}
@@ -121,7 +123,7 @@
                             <thead>
                             <tr>
                                 <th>Category</th>
-                                <th>Change</th>
+                                <th>Amount</th>
                             </tr>
                             </thead>
 
@@ -129,7 +131,7 @@
                             {% if savings %}
                                 {% for sav in savings %}
                                     <tr>
-                                        <td>{{ sav.category|slice:":15" }}</td>
+                                        <td>{{ sav.name|slice:":15" }}</td>
                                         <td>€{{ sav.amount|floatformat:2 }}</td>
                                     </tr>
                                 {% endfor %}
@@ -153,7 +155,7 @@
 
             <!-- INVESTMENTS TABLE -->
             <div class="column">
-                <a href="{% url 'income' %}" class="clickable-table-wrapper">
+                <a href="{% url 'investment' %}" class="clickable-table-wrapper">
                     <div class="table--dashboard-wrapper clickable-table">
                         <table class="table table--dashboard table-investments">
                             <caption class="header-title">INVESTMENTS</caption>
@@ -161,26 +163,29 @@
                             <thead>
                             <tr>
                                 <th>Type</th>
-                                <th>Transactions</th>
+                                <th>Amount</th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <tr>
-                                <td>Fund in USD</td>
-                                <td>€5226.23</td>
-                            </tr>
-
-                            <tr>
-                                <td>Stock</td>
-                                <td>€551.55</td>
-                            </tr>
+                            {% if investments %}
+                                {% for inv in investments %}
+                                    <tr>
+                                        <td>{{ inv.name|slice:":15" }}</td>
+                                        <td>€{{ inv.amount|floatformat:2 }}</td>
+                                    </tr>
+                                {% endfor %}
+                            {% else %}
+                                <tr>
+                                    <td>No investments yet</td>
+                                </tr>
+                            {% endif %}
                             </tbody>
 
                             <tfoot>
                             <tr class="total-row">
                                 <td>Total</td>
-                                <td>€1,996.97</td>
+                                <td>€{{ total_investments|floatformat:2 }}</td>
                             </tr>
                             </tfoot>
                         </table>

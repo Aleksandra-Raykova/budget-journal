@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 
-{% block title %}Income | Budget Journal{% endblock %}
+{% block title %}Investments | Budget Journal{% endblock %}
 
 {% block content %}
 
     <div class="container">
-        <h1>November 2025</h1>
+        <h1>{{ period.month_name }} {{ period.year }}</h1>
 
         <table class="table table-investments">
             <caption class="header-title">INVESTMENTS</caption>
@@ -13,43 +13,59 @@
             <thead>
             <tr>
                 <th>Type</th>
-                <th>Month Opening Value</th>
+                <th>Date</th>
+                <th>Amount Change</th>
                 <th></th>
             </tr>
             </thead>
 
             <tbody>
-            <tr>
-                <td>Fund in USD</td>
-                <td>€5226.23</td>
-                <td class="actions">
-                    <button class="icon-btn" title="Edit">✏️</button>
-                    <button class="icon-btn" title="Delete">🗑️</button>
-                </td>
-            </tr>
-
-            <tr>
-                <td>Stock</td>
-                <td>€551.55</td>
-                <td class="actions">
-                    <button class="icon-btn" title="Edit">✏️</button>
-                    <button class="icon-btn" title="Delete">🗑️</button>
-                </td>
-            </tr>
+            {% if investments %}
+                {% for inv in investments %}
+                    <tr>
+                        <td>{{ inv.name }}</td>
+                        <td>{{ inv.date }}</td>
+                        <td>€{{ inv.amount|floatformat:2 }}</td>
+                        <td class="actions">
+                            <form method="POST" action="{% url 'delete_investment' inv.id %}">
+                                {% csrf_token %}
+                                <button class="icon-btn" title="Delete">🗑️</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+            {% endif %}
             </tbody>
 
             <tfoot>
             <tr class="total-row">
                 <td>Total</td>
-                <td>€1,996.97</td>
+                <td></td>
+                <td>€{{ total_investments|floatformat:2 }}</td>
                 <td></td>
             </tr>
             </tfoot>
         </table>
 
-        <div class="add-btn-wrapper">
-            <a href="/add-income" class="add-button btn-blue">+ Add New Investment</a>
-        </div>
+        <form method="post">
+            {% csrf_token %}
+
+            {{ form.operation }}
+            {{ form.operation.errors|striptags }}
+
+            {{ form.name }}
+            {{ form.name.errors|striptags }}
+
+            {{ form.date }}
+            {{ form.date.errors|striptags }}
+
+            {{ form.amount }}
+            {{ form.amount.errors|striptags }}
+
+            <button type="submit" class="add-button btn-blue">+ Add New Investments</button>
+        </form>
+
     </div>
 
 {% endblock %}

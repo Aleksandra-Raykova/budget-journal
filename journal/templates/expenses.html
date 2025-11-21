@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Income | Budget Journal{% endblock %}
+{% block title %}Expenses | Budget Journal{% endblock %}
 
 {% block content %}
 
@@ -23,7 +23,7 @@
             {% if expenses %}
                 {% for exp in expenses %}
                     <tr>
-                        <td>{{ exp.bill }}</td>
+                        <td>{{ exp.name }}</td>
                         <td>{{ exp.date }}</td>
                         <td>€{{ exp.amount|floatformat:2 }}</td>
                         <td class="actions">
@@ -54,11 +54,11 @@
         <form method="post">
             {% csrf_token %}
 
+            {{ form.name }}
+            {{ form.name.errors|striptags }}
+
             {{ form.date }}
             {{ form.date.errors|striptags }}
-
-            {{ form.bill }}
-            {{ form.bill.errors|striptags }}
 
             {{ form.amount }}
             {{ form.amount.errors|striptags }}

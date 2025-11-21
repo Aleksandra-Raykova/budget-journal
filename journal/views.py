@@ -4,8 +4,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
-from .models import Income, Period, Expense, Saving
-from .forms import IncomeForm, ExpenseForm, SavingsForm
+from .models import Income, Period, Expense, Saving, Investment
+from .forms import IncomeForm, ExpenseForm, SavingsForm, InvestmentsForm
 from datetime import date
 
 
@@ -19,6 +19,7 @@ def get_current_period(user):
     return period
 
 
+# TODO - when money are removed from savings and investments there are automatically added to income
 @login_required
 def income(request):
     current_user = request.user
@@ -35,11 +36,11 @@ def income(request):
     else:
         form = IncomeForm(period=current_period)
 
-    incomes = Income.objects.filter(user=current_user, period=current_period)
-    total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
+    all_incomes = Income.objects.filter(user=current_user, period=current_period)
+    total_income = all_incomes.aggregate(total=Sum('amount'))['total'] or 0
 
     return render(request, 'incomes.html', {
-        'incomes': incomes,
+        'incomes': all_incomes,
         'form': form,
         'total_income': total_income,
         'period': current_period,
@@ -73,11 +74,11 @@ def expense(request):
     else:
         form = ExpenseForm(period=current_period)
 
-    expenses = Expense.objects.filter(user=current_user, period=current_period)
-    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    all_expenses = Expense.objects.filter(user=current_user, period=current_period)
+    total_expenses = all_expenses.aggregate(total=Sum('amount'))['total'] or 0
 
     return render(request, 'expenses.html', {
-        'expenses': expenses,
+        'expenses': all_expenses,
         'form': form,
         'total_expenses': total_expenses,
         'period': current_period,
@@ -86,10 +87,10 @@ def expense(request):
 
 @login_required()
 def delete_expense(request, pk):
-    expense = get_object_or_404(Expense, pk=pk)
+    expense_obj = get_object_or_404(Expense, pk=pk)
 
     if request.method == "POST":
-        expense.delete()
+        expense_obj.delete()
         return redirect('expense')
 
     return HttpResponse(status=405)
@@ -133,6 +134,44 @@ def delete_saving(request, pk):
     return HttpResponse(status=405)
 
 
+@login_required
+def investments(request):
+    current_user = request.user
+    current_period = get_current_period(current_user)
+
+    if request.method == "POST":
+        form = InvestmentsForm(request.POST, period=current_period)
+        if form.is_valid():
+            sav = form.save(commit=False)
+            sav.user = current_user
+            sav.period = current_period
+            sav.save()
+            form = InvestmentsForm(period=current_period)
+    else:
+        form = InvestmentsForm(period=current_period)
+
+    all_investments = Investment.objects.filter(user=current_user, period=current_period)
+    total_investments = all_investments.aggregate(total=Sum('amount'))['total'] or 0
+
+    return render(request, 'investments.html', {
+        'investments': all_investments,
+        'form': form,
+        'total_investments': total_investments,
+        'period': current_period,
+    })
+
+
+@login_required()
+def delete_investment(request, pk):
+    investment_obj = get_object_or_404(Investment, pk=pk)
+
+    if request.method == "POST":
+        investment_obj.delete()
+        return redirect('investment')
+
+    return HttpResponse(status=405)
+
+
 class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "dashboard.html"
 
@@ -151,7 +190,11 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         all_savings = Saving.objects.filter(user=current_user, period=current_period)
         total_savings = all_savings.aggregate(total=Sum('amount'))['total'] or 0
 
+        investments = Investment.objects.filter(user=current_user, period=current_period)
+        total_investments = investments.aggregate(total=Sum('amount'))['total'] or 0
+
         total_remaining = total_income - total_expenses
+        total_wealth = total_remaining + total_savings + total_investments
 
         ctx["period"] = current_period
         ctx["incomes"] = incomes
@@ -160,7 +203,10 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         ctx["total_expenses"] = total_expenses
         ctx["savings"] = all_savings
         ctx["total_savings"] = total_savings
+        ctx["investments"] = investments
+        ctx["total_investments"] = total_investments
         ctx["total_remaining"] = total_remaining
+        ctx["total_wealth"] = total_wealth
 
         return ctx
 
