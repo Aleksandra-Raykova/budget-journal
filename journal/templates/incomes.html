@@ -7,6 +7,17 @@
     <div class="container">
         <h1>{{ period.month_name }} {{ period.year }}</h1>
 
+        <div class="archive-dropdown">
+            <select onchange="window.location=this.value;">
+                <option value="">Select period</option>
+                {% for p in periods %}
+                    <option value="{% url 'income_archive' p.year p.month %}">
+                        {{ p.month_name }} {{ p.year }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
         <table class="table table-income">
             <caption class="header-title">INCOME</caption>
 
@@ -27,10 +38,12 @@
                         <td>{{ inc.date }}</td>
                         <td>€{{ inc.amount|floatformat:2 }}</td>
                         <td class="actions">
+                            {% if not archive_mode %}
                             <form method="POST" action="{% url 'delete_income' inc.id %}">
                                 {% csrf_token %}
                                 <button class="icon-btn" title="Delete">🗑️</button>
                             </form>
+                            {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -51,21 +64,23 @@
             </tfoot>
         </table>
 
-        <!-- Income Create Form -->
-        <form method="post">
-            {% csrf_token %}
+        {% if not archive_mode %}
+            <!-- Income Create Form -->
+            <form method="post">
+                {% csrf_token %}
 
-            {{ form.name }}
-            {{ form.name.errors|striptags }}
+                {{ form.name }}
+                {{ form.name.errors|striptags }}
 
-            {{ form.date }}
-            {{ form.date.errors|striptags }}
+                {{ form.date }}
+                {{ form.date.errors|striptags }}
 
-            {{ form.amount }}
-            {{ form.amount.errors|striptags }}
+                {{ form.amount }}
+                {{ form.amount.errors|striptags }}
 
-            <button type="submit" class="add-button btn-orange">+ Add New Income</button>
-        </form>
+                <button type="submit" class="add-button btn-orange">+ Add New Income</button>
+            </form>
+        {% endif %}
     </div>
 
 {% endblock %}

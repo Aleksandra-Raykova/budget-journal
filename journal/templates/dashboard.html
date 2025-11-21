@@ -5,14 +5,11 @@
 
 {% block content %}
     <div class="container">
-        <h1>November 2025</h1>
-
         <!-- TODO format the numbers with " " (space between) -->
-
         <div class="summary-bar">
             <div class="summary-item">
                 <h3>START AMOUNT</h3>
-                <p>€00.00</p> <!--TODO-->
+                <p>€{{ start_amount|floatformat:2 }}</p>
             </div>
 
             <div class="summary-item">

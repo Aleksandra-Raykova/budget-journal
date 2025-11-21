@@ -18,7 +18,6 @@ def get_current_period(user):
     )
     return period
 
-
 # TODO - when money are removed from savings and investments there are automatically added to income
 @login_required
 def income(request):
@@ -36,14 +35,17 @@ def income(request):
     else:
         form = IncomeForm(period=current_period)
 
-    all_incomes = Income.objects.filter(user=current_user, period=current_period)
+    all_incomes = Income.objects.filter(user=current_user, period=current_period).order_by('date')
     total_income = all_incomes.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
 
     return render(request, 'incomes.html', {
         'incomes': all_incomes,
         'form': form,
         'total_income': total_income,
         'period': current_period,
+        'periods': periods,
+        'archive_mode': False,
     })
 
 
@@ -76,12 +78,15 @@ def expense(request):
 
     all_expenses = Expense.objects.filter(user=current_user, period=current_period)
     total_expenses = all_expenses.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
 
     return render(request, 'expenses.html', {
         'expenses': all_expenses,
         'form': form,
         'total_expenses': total_expenses,
         'period': current_period,
+        'periods': periods,
+        'archive_mode': False,
     })
 
 
@@ -114,12 +119,15 @@ def savings(request):
 
     all_savings = Saving.objects.filter(user=current_user, period=current_period)
     total_savings = all_savings.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
 
     return render(request, 'savings.html', {
         'savings': all_savings,
         'form': form,
         'total_savings': total_savings,
         'period': current_period,
+        'periods': periods,
+        'archive_mode': False,
     })
 
 
@@ -152,12 +160,15 @@ def investments(request):
 
     all_investments = Investment.objects.filter(user=current_user, period=current_period)
     total_investments = all_investments.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
 
     return render(request, 'investments.html', {
         'investments': all_investments,
         'form': form,
         'total_investments': total_investments,
         'period': current_period,
+        'periods': periods,
+        'archive_mode': False,
     })
 
 
@@ -210,7 +221,93 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
         return ctx
 
+@login_required
+def income_archive(request, year, month):
+    current_user = request.user
+    current_period = get_current_period(current_user)
 
+    period = get_object_or_404(Period, user=current_user, year=year, month=month)
+    incomes = Income.objects.filter(user=current_user, period=period)
+    total_income = incomes.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
+
+    if period == current_period:
+        return redirect('income')
+
+    return render(request, 'incomes.html', {
+        'incomes': incomes,
+        'form': None,
+        'total_income': total_income,
+        'period': period,
+        'periods': periods,
+        'archive_mode': True,
+    })
+
+@login_required
+def expenses_archive(request, year, month):
+    current_user = request.user
+    current_period = get_current_period(current_user)
+
+    period = get_object_or_404(Period, user=current_user, year=year, month=month)
+    expenses = Expense.objects.filter(user=current_user, period=period)
+    total_expenses = expenses.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
+
+    if period == current_period:
+        return redirect('expense')
+
+    return render(request, 'expenses.html', {
+        'expenses': expenses,
+        'form': None,
+        'total_expenses': total_expenses,
+        'period': period,
+        'periods': periods,
+        'archive_mode': True,
+    })
+
+@login_required
+def savings_archive(request, year, month):
+    current_user = request.user
+    current_period = get_current_period(current_user)
+
+    period = get_object_or_404(Period, user=current_user, year=year, month=month)
+    savings = Saving.objects.filter(user=current_user, period=period)
+    total_savings = savings.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
+
+    if period == current_period:
+        return redirect('saving')
+
+    return render(request, 'savings.html', {
+        'savings': savings,
+        'form': None,
+        'total_savings': total_savings,
+        'period': period,
+        'periods': periods,
+        'archive_mode': True,
+    })
+
+@login_required
+def investments_archive(request, year, month):
+    current_user = request.user
+    current_period = get_current_period(current_user)
+
+    period = get_object_or_404(Period, user=current_user, year=year, month=month)
+    investments = Investment.objects.filter(user=current_user, period=period)
+    total_investments = investments.aggregate(total=Sum('amount'))['total'] or 0
+    periods = Period.objects.filter(user=current_user).order_by('-year', '-month')
+
+    if period == current_period:
+        return redirect('investment')
+
+    return render(request, 'investments.html', {
+        'investments': investments,
+        'form': None,
+        'total_investments': total_investments,
+        'period': period,
+        'periods': periods,
+        'archive_mode': True,
+    })
 @login_required
 def reports(request):
     return render(request, 'reports.html')

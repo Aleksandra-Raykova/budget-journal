@@ -7,6 +7,17 @@
     <div class="container">
         <h1>{{ period.month_name }} {{ period.year }}</h1>
 
+        <div class="archive-dropdown">
+            <select onchange="window.location=this.value;">
+                <option value="">Select period</option>
+                {% for p in periods %}
+                    <option value="{% url 'expenses_archive' p.year p.month %}">
+                        {{ p.month_name }} {{ p.year }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
         <table class="table table-expenses">
             <caption class="header-title">EXPENSES</caption>
 
@@ -51,20 +62,23 @@
             </tfoot>
         </table>
 
-        <form method="post">
-            {% csrf_token %}
+        {% if not archive_mode %}
 
-            {{ form.name }}
-            {{ form.name.errors|striptags }}
+            <form method="post">
+                {% csrf_token %}
 
-            {{ form.date }}
-            {{ form.date.errors|striptags }}
+                {{ form.name }}
+                {{ form.name.errors|striptags }}
 
-            {{ form.amount }}
-            {{ form.amount.errors|striptags }}
+                {{ form.date }}
+                {{ form.date.errors|striptags }}
 
-            <button type="submit" class="add-button btn-red">+ Add New Expense</button>
-        </form>
+                {{ form.amount }}
+                {{ form.amount.errors|striptags }}
+
+                <button type="submit" class="add-button btn-red">+ Add New Expense</button>
+            </form>
+        {% endif %}
     </div>
 
 {% endblock %}
